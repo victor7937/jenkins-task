@@ -58,11 +58,6 @@ public class CertificateServiceTest {
     class GettingByIdTests {
 
         @Test
-        void failTest(){
-            fail();
-        }
-
-        @Test
         void correctGettingByIdShouldReturnCertificate(){
             GiftCertificate expected = certificateSample;
             certificateSample.setId(idSample);
