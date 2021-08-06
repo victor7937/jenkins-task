@@ -7,6 +7,7 @@ import com.epam.esm.security.provider.AuthenticationAndTokenProvider;
 import com.epam.esm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,11 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthDTO authDTO){
         return new AuthResponse(authDTO.getEmail(), authAndTokenProvider.authenticate(authDTO));
+    }
+
+    @GetMapping("/hi")
+    public String sayHallo(){
+        return "Hallo";
     }
 
 
