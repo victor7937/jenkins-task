@@ -6,7 +6,6 @@ import com.epam.esm.dto.UserDTO;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
-import com.epam.esm.exception.ServiceException;
 
 
 /**

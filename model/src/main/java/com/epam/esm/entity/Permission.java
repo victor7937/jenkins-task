@@ -7,10 +7,10 @@ public enum Permission {
     USERS_READ("users:read"), USERS_READ_SELF("users:read-self"),
     ORDERS_READ("orders:read");
 
-    public final String name;
+    public final String title;
 
-    Permission(String name) {
-        this.name = name;
+    Permission(String title) {
+        this.title = title;
     }
 
 }

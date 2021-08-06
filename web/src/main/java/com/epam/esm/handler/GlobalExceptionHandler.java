@@ -1,8 +1,10 @@
 package com.epam.esm.handler;
 
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.AlreadyExistServiceException;
+import com.epam.esm.exception.IncorrectDataServiceException;
+import com.epam.esm.exception.NotFoundServiceException;
+import com.epam.esm.exception.ServiceException;
 import com.epam.esm.message.ResponseExceptionMessage;
-
 import com.epam.esm.security.exception.JwtAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;

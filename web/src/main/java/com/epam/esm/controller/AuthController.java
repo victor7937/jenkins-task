@@ -47,7 +47,7 @@ public class AuthController {
      * @return response with current users email and JWT token
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody UserDTO userDTO){
+    public ResponseEntity<Object> signup(@RequestBody UserDTO userDTO){
         userService.registration(userDTO);
         return ResponseEntity.ok().build();
     }

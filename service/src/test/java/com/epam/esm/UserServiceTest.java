@@ -1,12 +1,12 @@
 package com.epam.esm;
 
-import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.criteria.UserCriteria;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.AlreadyExistServiceException;
+import com.epam.esm.exception.IncorrectDataServiceException;
+import com.epam.esm.exception.NotFoundServiceException;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.impl.UserServiceImpl;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

@@ -1,6 +1,5 @@
 package com.epam.esm.entity;
 
-import com.epam.esm.audit.GiftCertificateAuditListener;
 import com.epam.esm.audit.UserAuditListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

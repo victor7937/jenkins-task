@@ -1,14 +1,20 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dto.PagedDTO;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.Tag_;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.AlreadyExistServiceException;
+import com.epam.esm.exception.IncorrectDataServiceException;
+import com.epam.esm.exception.NotFoundServiceException;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.ServiceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +27,7 @@ public class TagServiceImpl implements TagService{
 
 
     private final TagRepository tagRepository;
-    private final ServiceValidator<Tag> validator;
+    private final ServiceValidator<TagDTO> validator;
 
     private static final String NOT_EXIST_MSG = "Tag id with number %s doesn't exist";
     private static final String ALREADY_EXIST_MSG = "Tag with name %s already exists";
@@ -31,7 +37,7 @@ public class TagServiceImpl implements TagService{
 
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository, ServiceValidator<Tag> validator) {
+    public TagServiceImpl(TagRepository tagRepository, ServiceValidator<TagDTO> validator) {
         this.tagRepository = tagRepository;
         this.validator = validator;
     }
@@ -60,13 +66,14 @@ public class TagServiceImpl implements TagService{
 
     @Override
     @Transactional
-    public Tag add(Tag tag){
-        if (!validator.validate(tag)){
+    public Tag add(TagDTO tagDTO){
+        if (!validator.validate(tagDTO)){
             throw new IncorrectDataServiceException(INCORRECT_TAG_MSG);
         }
-        if (tagRepository.existsByName(tag.getName())){
-            throw new AlreadyExistServiceException(String.format(ALREADY_EXIST_MSG, tag.getName()));
+        if (tagRepository.existsByName(tagDTO.getName())){
+            throw new AlreadyExistServiceException(String.format(ALREADY_EXIST_MSG, tagDTO.getName()));
         }
+        Tag tag = new Tag(tagDTO.getName());
         return tagRepository.save(tag);
     }
 

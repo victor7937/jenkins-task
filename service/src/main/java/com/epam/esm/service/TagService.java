@@ -1,13 +1,11 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.PagedDTO;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.AlreadyExistServiceException;
 import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
-import com.epam.esm.exception.ServiceException;
-
-import java.util.List;
 
 /**
  * Service for manipulating tags data
@@ -39,7 +37,7 @@ public interface TagService {
      * @throws IncorrectDataServiceException when params are incorrect
      * @throws AlreadyExistServiceException if such tag exists
      */
-    Tag add(Tag tag);
+    Tag add(TagDTO tag);
 
     /**
      * Delete tag

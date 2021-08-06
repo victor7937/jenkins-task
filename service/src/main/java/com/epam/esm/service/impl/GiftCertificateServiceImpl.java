@@ -1,8 +1,8 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
-import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificate_;
 import com.epam.esm.entity.Tag;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 

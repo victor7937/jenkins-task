@@ -5,7 +5,10 @@ import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.IncorrectDataServiceException;
+import com.epam.esm.exception.NotFoundServiceException;
+import com.epam.esm.exception.RepositoryException;
+import com.epam.esm.exception.ServiceException;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.GiftCertificateService;
@@ -90,7 +93,7 @@ public class CertificateServiceTest {
         void correctDeletingShouldNotRaiseException(){
             certificateSample.setDeleted(false);
             when(repository.findById(anyLong())).thenReturn(Optional.of(certificateSample));
-            service.delete(idSample);
+            assertDoesNotThrow(() -> service.delete(idSample));
         }
 
         @Test

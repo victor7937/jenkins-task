@@ -1,20 +1,27 @@
 package com.epam.esm;
 
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.*;
+import com.epam.esm.exception.AlreadyExistServiceException;
+import com.epam.esm.exception.IncorrectDataServiceException;
+import com.epam.esm.exception.NotFoundServiceException;
+import com.epam.esm.exception.RepositoryException;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.impl.TagServiceImpl;
 import com.epam.esm.validator.impl.TagValidator;
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -93,17 +100,17 @@ public class TagServiceTest {
     class AddingTests {
         @Test
         void correctAddingNewTagShouldNotRaiseException () {
-            Tag tagForAdding = new Tag("name");
+            TagDTO tagForAdding = new TagDTO("name");
             Tag tagForReturning = new Tag(CORRECT_ID_VALUE,"name");
             when(tagRepository.save(any(Tag.class))).thenReturn(tagForReturning);
             assertEquals(tagForReturning, tagService.add(tagForAdding));
-            verify(tagRepository).save(tagForAdding);
+            verify(tagRepository).save(new Tag(tagForAdding.getName()));
         }
 
         @Test
         void addingExistedTagShouldRaiseException(){
             when(tagRepository.existsByName(anyString())).thenReturn(true);
-            assertThrows(AlreadyExistServiceException.class, () -> tagService.add(new Tag("existed_tag")));
+            assertThrows(AlreadyExistServiceException.class, () -> tagService.add(new TagDTO("existed_tag")));
             verify(tagRepository, never()).save(any(Tag.class));
         }
 
@@ -112,8 +119,8 @@ public class TagServiceTest {
         void addingIncorrectTagShouldRaiseException(){
             assertAll(
                     () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(null)),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new Tag(null))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new Tag("   ")))
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new TagDTO(null))),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new TagDTO("   ")))
             );
             verify(tagRepository, never()).save(any(Tag.class));
         }

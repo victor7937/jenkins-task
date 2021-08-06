@@ -1,10 +1,10 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.OrderRequestDTO;
 import com.epam.esm.dto.PagedDTO;
-import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Permission;
@@ -14,8 +14,6 @@ import com.epam.esm.hateoas.model.GiftCertificateModel;
 import com.epam.esm.hateoas.model.OrderModel;
 import com.epam.esm.security.provider.AuthenticationAndTokenProvider;
 import com.epam.esm.service.GiftCertificateService;
-
-
 import com.epam.esm.service.OrderService;
 import com.epam.esm.util.PatchUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,21 +21,17 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.hateoas.IanaLinkRelations;
 
 import java.util.Map;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
@@ -171,7 +165,7 @@ public class GiftCertificateController {
         if (!authAndTokenProvider.hasAuthentication()) {
             return;
         }
-        if (authAndTokenProvider.containsAuthority(Permission.CERTIFICATES_WRITE.name)){
+        if (authAndTokenProvider.containsAuthority(Permission.CERTIFICATES_WRITE.title)){
             model.mapLink(IanaLinkRelations.SELF, l -> l
                     .andAffordance(afford(methodOn(GiftCertificateController.class).addNewCertificate(null)))
                     .andAffordance(afford(methodOn(GiftCertificateController.class).updateCertificate(model.getId(),null)))

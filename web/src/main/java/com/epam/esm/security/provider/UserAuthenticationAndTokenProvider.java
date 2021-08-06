@@ -1,6 +1,5 @@
 package com.epam.esm.security.provider;
 
-import com.epam.esm.entity.Permission;
 import com.epam.esm.security.AuthDTO;
 import com.epam.esm.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class UserAuthenticationAndTokenProvider implements AuthenticationAndTokenProvider {

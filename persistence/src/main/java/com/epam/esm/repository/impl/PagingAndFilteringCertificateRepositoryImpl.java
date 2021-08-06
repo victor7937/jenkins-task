@@ -7,7 +7,6 @@ import com.epam.esm.entity.GiftCertificate_;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DataNotExistRepositoryException;
 import com.epam.esm.exception.IncorrectPageRepositoryException;
-import com.epam.esm.exception.RepositoryException;
 import com.epam.esm.repository.PagingAndFilteringCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.util.CriteriaUtil;

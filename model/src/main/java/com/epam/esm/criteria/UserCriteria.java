@@ -1,12 +1,9 @@
 package com.epam.esm.criteria;
 
 
-import com.epam.esm.entity.User;
 import com.epam.esm.entity.User_;
 import lombok.Getter;
-import org.apache.commons.lang3.EnumUtils;
 
-import javax.persistence.metamodel.SingularAttribute;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

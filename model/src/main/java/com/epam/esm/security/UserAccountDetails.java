@@ -18,7 +18,7 @@ public class UserAccountDetails implements UserDetails {
 
     private Long id;
 
-    Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
     private Boolean enabled;
 

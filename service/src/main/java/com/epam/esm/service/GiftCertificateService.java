@@ -1,12 +1,11 @@
 package com.epam.esm.service;
 
+import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
-import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
-import com.epam.esm.exception.ServiceException;
 
 
 /**

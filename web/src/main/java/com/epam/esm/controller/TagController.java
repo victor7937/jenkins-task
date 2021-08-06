@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.PagedDTO;
+import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,13 @@ public class TagController {
 
     /**
      * Post method for adding a new tag
-     * @param tag - tag for adding
+     * @param tagDTO - tag name for adding
      * @return tag that was added in JSON
      */
     @PostMapping()
     @PreAuthorize("hasAuthority('tags:write')")
-    public Tag addNewTag(@RequestBody Tag tag) {
-        return tagService.add(tag);
+    public Tag addNewTag(@RequestBody TagDTO tagDTO) {
+        return tagService.add(tagDTO);
     }
 
     /**

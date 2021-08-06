@@ -1,7 +1,6 @@
 package com.epam.esm.validator.impl;
 
 import com.epam.esm.dto.UserDTO;
-import com.epam.esm.entity.User;
 import com.epam.esm.validator.ServiceValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;

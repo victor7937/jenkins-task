@@ -3,7 +3,6 @@ package com.epam.esm.criteria;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificate_;
 import lombok.Getter;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.metamodel.SingularAttribute;
