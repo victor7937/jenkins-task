@@ -5,7 +5,6 @@ import com.epam.esm.criteria.CertificateCriteria;
 import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
 import com.epam.esm.hateoas.assembler.GiftCertificateAssembler;
@@ -35,14 +34,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -146,7 +142,7 @@ class CertificateControllerTests {
     void deletingNotExistedIdShouldRaiseException() throws Exception {
         doThrow(NotFoundServiceException.class).when(certificateService).delete(anyLong());
 
-        mvc.perform(delete("/certificates/{id}",1))
+        mvc.perform(delete("/certificates/{id}",99))
                 .andExpect(status().isNotFound());
     }
 
@@ -167,7 +163,6 @@ class CertificateControllerTests {
 
     @Test
     void addingWithIncorrectDataShouldBeBadRequest() throws Exception {
-        GiftCertificate expected = certificateSample2;
         when(certificateService.add(any(CertificateDTO.class))).thenThrow(IncorrectDataServiceException.class);
         CertificateDTO certificateDTO = certificateDTOSample;
         certificateDTO.setName(null);
@@ -190,7 +185,8 @@ class CertificateControllerTests {
         GiftCertificate expected = new GiftCertificate();
         modelMapper.map(current, expected);
         expected.setName(modifiedName);
-        when(certificateService.update(modified, current.getId())).thenReturn(expected);
+        when(certificateService.update(modified
+                , current.getId())).thenReturn(expected);
 
 
         mvc.perform(patch("/certificates/{id}", 1).contentType("application/json-patch+json")
