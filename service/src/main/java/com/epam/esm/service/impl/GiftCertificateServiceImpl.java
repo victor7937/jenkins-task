@@ -105,7 +105,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
         GiftCertificate giftCertificate = giftCertificateRepository.findById(id).orElseThrow(() ->
                 new NotFoundServiceException(String.format(NOT_EXIST_MSG, id)));
-        if (giftCertificate.getDeleted()){
+        boolean deleted = giftCertificate.getDeleted();
+        if (deleted){
             throw new AlreadyExistServiceException(String.format(ALREADY_DELETED_MSG, id));
         }
         giftCertificate.setDeleted(true);

@@ -9,7 +9,6 @@ import com.epam.esm.hateoas.assembler.OrderAssembler;
 import com.epam.esm.hateoas.assembler.UserAssembler;
 import com.epam.esm.hateoas.model.OrderModel;
 import com.epam.esm.hateoas.model.UserModel;
-import com.epam.esm.security.provider.AuthenticationAndTokenProvider;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,17 +36,15 @@ public class UserController {
     private final OrderService orderService;
     private final UserAssembler userAssembler;
     private final OrderAssembler orderAssembler;
-    private final AuthenticationAndTokenProvider authAndTokenProvider;
 
 
     @Autowired
     public UserController(UserService userService, OrderService orderService, UserAssembler userAssembler,
-                          OrderAssembler orderAssembler, AuthenticationAndTokenProvider authAndTokenProvider) {
+                          OrderAssembler orderAssembler) {
         this.userService = userService;
         this.orderService = orderService;
         this.userAssembler = userAssembler;
         this.orderAssembler = orderAssembler;
-        this.authAndTokenProvider = authAndTokenProvider;
     }
 
     /**

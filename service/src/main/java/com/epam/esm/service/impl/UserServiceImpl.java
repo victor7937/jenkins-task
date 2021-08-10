@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private static final String INCORRECT_PARAMS_MSG = "Incorrect request parameter values";
     private static final String INCORRECT_USERS_EMAIL_MSG = "Users email is incorrect";
     private static final String INCORRECT_USER_MSG = "Users id is incorrect";
-    private static final String PASSWORD_IS_INVALID_MSG = "password is invalid";
     private static final String ALREADY_EXISTS_EMAIL_MSG = "Email %s already exists";
 
 

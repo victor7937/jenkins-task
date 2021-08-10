@@ -128,10 +128,11 @@ public class CertificateServiceTest {
 
         @Test
         void gettingWithIncorrectPageParamsShouldRaiseException() throws RepositoryException {
+            CertificateCriteria criteria = CertificateCriteria.createCriteria(new HashMap<>());
             assertAll(
-                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(CertificateCriteria.createCriteria(new HashMap<>()),-1,2)),
-                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(CertificateCriteria.createCriteria(new HashMap<>()),2,-1)),
-                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(CertificateCriteria.createCriteria(new HashMap<>()),0,0))
+                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(criteria,-1,2)),
+                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(criteria,2,-1)),
+                    () -> assertThrows(IncorrectDataServiceException.class, () -> service.get(criteria,0,0))
             );
             verify(repository, never()).getByCriteria(any(CertificateCriteria.class), anyInt(), anyInt());
         }
@@ -150,11 +151,14 @@ public class CertificateServiceTest {
 
         @Test
         void addingIncorrectGiftCertificateShouldRaiseException() {
+            CertificateDTO incorrectDto1 = new CertificateDTO("","test1",1.1f,1, new HashSet<>());
+            CertificateDTO incorrectDto2 =  new CertificateDTO("name1","test1",null,1, new HashSet<>());
+            CertificateDTO incorrectDto3 = new CertificateDTO("name1","test1",null,-1, new HashSet<>());
             assertAll(
                     () -> assertThrows(IncorrectDataServiceException.class,() -> service.add(null)),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add( new CertificateDTO("","test1",1.1f,1, new HashSet<>()))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add( new CertificateDTO("name1","test1",null,1, new HashSet<>()))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add( new CertificateDTO("name1","test1",null,-1, new HashSet<>())))
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add(incorrectDto1)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add(incorrectDto2)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.add(incorrectDto3))
             );
             CertificateDTO certificateForAdding = certificateDTOSample;
             Set<Tag> tags = Set.of(new Tag("name"),new Tag(null));

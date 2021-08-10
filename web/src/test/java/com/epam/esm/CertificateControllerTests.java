@@ -1,9 +1,7 @@
 package com.epam.esm;
 
 import com.epam.esm.controller.GiftCertificateController;
-import com.epam.esm.controller.TagController;
 import com.epam.esm.criteria.CertificateCriteria;
-import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
@@ -15,17 +13,10 @@ import com.epam.esm.security.jwt.JwtTokenFilter;
 import com.epam.esm.security.provider.AuthenticationAndTokenProvider;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.OrderService;
-import com.epam.esm.service.TagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.collections.map.MultiValueMap;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -37,18 +28,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.persistence.EntityManagerFactory;
+import org.springframework.test.web.servlet.MockMvc;
+
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -60,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = GiftCertificateController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class,
         excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {SecurityConfig.class, JwtTokenFilter.class}))
-public class CertificateControllerTests {
+class CertificateControllerTests {
 
     @TestConfiguration
     static class GiftCertificateControllerConfiguration {

@@ -110,17 +110,20 @@ public class TagServiceTest {
         @Test
         void addingExistedTagShouldRaiseException(){
             when(tagRepository.existsByName(anyString())).thenReturn(true);
-            assertThrows(AlreadyExistServiceException.class, () -> tagService.add(new TagDTO("existed_tag")));
+            TagDTO tagDTO = new TagDTO("existed_tag");
+            assertThrows(AlreadyExistServiceException.class, () -> tagService.add(tagDTO));
             verify(tagRepository, never()).save(any(Tag.class));
         }
 
 
         @Test
         void addingIncorrectTagShouldRaiseException(){
+            TagDTO incorrectTagDto1 = new TagDTO(null);
+            TagDTO incorrectTagDto2 = new TagDTO("   ");
             assertAll(
                     () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(null)),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new TagDTO(null))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(new TagDTO("   ")))
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(incorrectTagDto1)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> tagService.add(incorrectTagDto2))
             );
             verify(tagRepository, never()).save(any(Tag.class));
         }

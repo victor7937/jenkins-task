@@ -7,15 +7,7 @@ public class JwtAuthenticationException extends AuthenticationException {
 
     private static final long serialVersionUID = 9191813960427290877L;
 
-    private HttpStatus httpStatus;
-
-    public JwtAuthenticationException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
-
-    public JwtAuthenticationException(String msg) {
-        super(msg);
-    }
+    private final HttpStatus httpStatus;
 
     public JwtAuthenticationException(String msg, HttpStatus httpStatus) {
         super(msg);

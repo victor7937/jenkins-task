@@ -90,7 +90,8 @@ public class GiftCertificateController {
     public GiftCertificateModel getCertificateById (@PathVariable("id") Long id){
         GiftCertificate giftCertificate = giftCertificateService.getById(id);
         GiftCertificateModel certificateModel = certificateAssembler.toModel(giftCertificate);
-        if (!giftCertificate.getDeleted()){
+        boolean deleted = giftCertificate.getDeleted();
+        if (!deleted){
             addAffordances(certificateModel);
         }
         return certificateModel;
@@ -133,7 +134,8 @@ public class GiftCertificateController {
         GiftCertificate certificateForResponse;
         ModelMapper modelMapper = new ModelMapper();
         GiftCertificate giftCertificate = giftCertificateService.getById(id);
-        if (giftCertificate.getDeleted()){
+        boolean deleted = giftCertificate.getDeleted();
+        if (deleted){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found");
         }
         CertificateDTO current = modelMapper.map(giftCertificate, CertificateDTO.class);
@@ -161,8 +163,8 @@ public class GiftCertificateController {
     }
 
     private void addAffordances(GiftCertificateModel model){
-
-        if (!authAndTokenProvider.hasAuthentication()) {
+        boolean isAuthenticated = authAndTokenProvider.hasAuthentication();
+        if (!isAuthenticated) {
             return;
         }
         if (authAndTokenProvider.containsAuthority(Permission.CERTIFICATES_WRITE.title)){

@@ -173,10 +173,13 @@ public class OrderServiceTests {
             lenient().when(certificateRepository.findById(notExistentId)).thenReturn(Optional.empty());
             lenient().when(certificateRepository.findById(idSample)).thenReturn(Optional.ofNullable(giftCertificateFound));
 
+            OrderDTO incorrectDto1 = new OrderDTO(notExistentEmail, idSample);
+            OrderDTO incorrectDto2 = new OrderDTO(userEmailSample, notExistentId);
+            OrderDTO incorrectDto3 = new OrderDTO(notExistentEmail, notExistentId);
             assertAll(
-                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(new OrderDTO(notExistentEmail, idSample))),
-                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(new OrderDTO(userEmailSample, notExistentId))),
-                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(new OrderDTO(notExistentEmail, notExistentId)))
+                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(incorrectDto1)),
+                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(incorrectDto2)),
+                    () ->  assertThrows(NotFoundServiceException.class,() -> service.makeOrder(incorrectDto3))
             );
 
             verify(orderRepository, never()).save(any(Order.class));
@@ -185,12 +188,16 @@ public class OrderServiceTests {
 
         @Test
         void addingIncorrectOrderShouldRaiseException() {
+            OrderDTO incorrectOrderDto1 = new OrderDTO(null, idSample);
+            OrderDTO incorrectOrderDto2 = new OrderDTO(userEmailSample, null);
+            OrderDTO incorrectOrderDto3 = new OrderDTO("", idSample);
+            OrderDTO incorrectOrderDto4 = new OrderDTO("somenotemail", idSample);
             assertAll(
                     () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(null)),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(new OrderDTO(null, idSample))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(new OrderDTO(userEmailSample, null))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(new OrderDTO("", idSample))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(new OrderDTO("somenotemail", idSample)))
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(incorrectOrderDto1)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(incorrectOrderDto2)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(incorrectOrderDto3)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.makeOrder(incorrectOrderDto4))
             );
 
             verify(orderRepository, never()).save(any(Order.class));

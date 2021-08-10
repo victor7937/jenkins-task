@@ -86,7 +86,7 @@ public class TagController {
      */
     @GetMapping("/most-used-tag")
     @PreAuthorize("hasAuthority('tags:read')")
-    Tag getMostUsedTagOfValuableCustomer() {
+    public Tag getMostUsedTagOfValuableCustomer() {
         return tagService.getMostUsedTagOfValuableCustomer();
     }
 

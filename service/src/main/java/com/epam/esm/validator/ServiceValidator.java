@@ -22,7 +22,7 @@ public interface ServiceValidator <T> {
      */
     default boolean isLongIdValid(Long id) {
         return id != null && id > 0L;
-    };
+    }
 
     /**
      * Default validating of string type id of some entity
@@ -31,7 +31,7 @@ public interface ServiceValidator <T> {
      */
     default boolean isStringIdValid(String id) {
         return id != null && !id.isBlank();
-    };
+    }
 
 
     /**

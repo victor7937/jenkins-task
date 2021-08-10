@@ -160,14 +160,20 @@ public class UserServiceTest {
 
         @Test
         void registrationWithIncorrectDataShouldRaiseException(){
+            UserDTO incorrectUserDto1 = new UserDTO();
+            UserDTO incorrectUserDto2 = new UserDTO(null, null);
+            UserDTO incorrectUserDto3 = new UserDTO(emailSample, null);
+            UserDTO incorrectUserDto4 = new UserDTO(null, passwordSample);
+            UserDTO incorrectUserDto5 = new UserDTO("not_anemail@email.not@email.not", emailSample);
+            UserDTO incorrectUserDto6 = new UserDTO(emailSample, "");
             assertAll(
                     () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(null)),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO())),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO(null, null))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO(emailSample, null))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO(null, passwordSample))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO("not_anemail@email.not@email.not", emailSample))),
-                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(new UserDTO(emailSample, "")))
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto1)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto2)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto3)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto4)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto5)),
+                    () -> assertThrows(IncorrectDataServiceException.class,() -> service.registration(incorrectUserDto6))
             );
             verify(repository, never()).save(any(User.class));
         }

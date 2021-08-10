@@ -8,6 +8,8 @@ import javax.persistence.metamodel.SingularAttribute;
 
 public class CriteriaUtil {
 
+    private CriteriaUtil() {}
+
     public static Long getResultsCount(EntityManager entityManager, Predicate conditions, Class<?> tClass){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
