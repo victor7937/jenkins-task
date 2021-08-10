@@ -2,9 +2,11 @@ package com.epam.esm;
 
 import com.epam.esm.controller.GiftCertificateController;
 import com.epam.esm.criteria.CertificateCriteria;
+import com.epam.esm.dto.CertificateDTO;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
 import com.epam.esm.hateoas.assembler.GiftCertificateAssembler;
 import com.epam.esm.hateoas.assembler.OrderAssembler;
@@ -29,15 +31,17 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.hateoas.PagedModel;
 
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,7 +77,7 @@ class CertificateControllerTests {
     @MockBean
     private AuthenticationAndTokenProvider authAndTokenProvider;
 
-    private JacksonTester<Tag> jackson;
+    private JacksonTester<CertificateDTO> jackson;
 
    // final GiftCertificate certificateSample = new GiftCertificate("name","test GiftCertificate",23.5f,2);
     final GiftCertificate certificateSample2 = new GiftCertificate(1L,"name","test GiftCertificate",23.5f,2, LocalDateTime.now(), LocalDateTime.now());
@@ -81,7 +85,7 @@ class CertificateControllerTests {
             new GiftCertificate("name1","test1",1.1f,1),
             new GiftCertificate("name2","test2",1.2f,2),
             new GiftCertificate("name3","test3",1.3f,3));
-    //final CertificateDTO certificateDTOSample = new CertificateDTO("name","test GiftCertificate",23.5f,2, new HashSet<>());
+    final CertificateDTO certificateDTOSample = new CertificateDTO(certificateSample2.getName(),certificateSample2.getDescription(), certificateSample2.getPrice(), certificateSample2.getDuration(), certificateSample2.getTags());
     //final Long idSample = 1L;
     //final Long notExistingIdSample = 999L;
 
@@ -145,5 +149,57 @@ class CertificateControllerTests {
         mvc.perform(delete("/certificates/{id}",1))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void addingWithCorrectDataShouldBeOk() throws Exception {
+        GiftCertificate expected = certificateSample2;
+        when(certificateService.add(any(CertificateDTO.class))).thenReturn(expected);
+        CertificateDTO certificateDTO = certificateDTOSample;
+
+        mvc.perform(post("/certificates").contentType(MediaType.APPLICATION_JSON)
+                .content(jackson.write(certificateDTO).getJson()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(expected.getId()))
+                .andExpect(jsonPath("$.name").value(expected.getName()))
+                .andExpect(jsonPath("$.price").value(expected.getPrice()))
+                .andExpect(jsonPath("$.createDate").exists());
+    }
+
+    @Test
+    void addingWithIncorrectDataShouldBeBadRequest() throws Exception {
+        GiftCertificate expected = certificateSample2;
+        when(certificateService.add(any(CertificateDTO.class))).thenThrow(IncorrectDataServiceException.class);
+        CertificateDTO certificateDTO = certificateDTOSample;
+        certificateDTO.setName(null);
+
+        mvc.perform(post("/certificates").contentType(MediaType.APPLICATION_JSON)
+                        .content(jackson.write(certificateDTO).getJson()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updatingWithCorrectDataShouldBeOk() throws Exception {
+        GiftCertificate current = certificateSample2;
+        current.setDeleted(false);
+
+        when(certificateService.getById(current.getId())).thenReturn(current);
+        String modifiedName = "Patched name";
+        CertificateDTO modified = certificateDTOSample;
+        modified.setName(modifiedName);
+        ModelMapper modelMapper = new ModelMapper();
+        GiftCertificate expected = new GiftCertificate();
+        modelMapper.map(current, expected);
+        expected.setName(modifiedName);
+        when(certificateService.update(modified, current.getId())).thenReturn(expected);
+
+
+        mvc.perform(patch("/certificates/{id}", 1).contentType("application/json-patch+json")
+                        .content("[{\"op\":\"replace\", \"path\":\"/name\", \"value\":\"Patched name\"}]"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(expected.getId()))
+                .andExpect(jsonPath("$.name").value(expected.getName()));
+    }
+
+
 
 }
