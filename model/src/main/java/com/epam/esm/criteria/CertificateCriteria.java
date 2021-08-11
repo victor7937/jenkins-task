@@ -16,8 +16,8 @@ import java.util.*;
 @Getter
 public class CertificateCriteria extends Criteria {
 
-    private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.parse("2021-06-01T00:00:00");
-    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.parse("2025-01-01T00:00:00");
+    public static final LocalDateTime MIN_DATE_TIME = LocalDateTime.parse("2021-06-01T00:00:00");
+    public static final LocalDateTime MAX_DATE_TIME = LocalDateTime.parse("2025-01-01T00:00:00");
 
     private Set<String> tagNames;
 
