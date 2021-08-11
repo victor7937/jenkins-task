@@ -75,15 +75,12 @@ class CertificateControllerTests {
 
     private JacksonTester<CertificateDTO> jackson;
 
-   // final GiftCertificate certificateSample = new GiftCertificate("name","test GiftCertificate",23.5f,2);
     final GiftCertificate certificateSample2 = new GiftCertificate(1L,"name","test GiftCertificate",23.5f,2, LocalDateTime.now(), LocalDateTime.now());
     final List<GiftCertificate> certificateListSample = List.of(
             new GiftCertificate("name1","test1",1.1f,1),
             new GiftCertificate("name2","test2",1.2f,2),
             new GiftCertificate("name3","test3",1.3f,3));
     final CertificateDTO certificateDTOSample = new CertificateDTO(certificateSample2.getName(),certificateSample2.getDescription(), certificateSample2.getPrice(), certificateSample2.getDuration(), certificateSample2.getTags());
-    //final Long idSample = 1L;
-    //final Long notExistingIdSample = 999L;
 
     @BeforeEach
     void setup() {
@@ -107,6 +104,17 @@ class CertificateControllerTests {
 
         mvc.perform(get("/certificates/{id}",99))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void gettingWithIncorrectParamShouldBeBadRequest() throws Exception {
+        when(certificateService.getById(anyLong())).thenThrow(IncorrectDataServiceException.class);
+
+        mvc.perform(get("/certificates/{id}",-1))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/certificates/dfde"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -139,7 +147,7 @@ class CertificateControllerTests {
     }
 
     @Test
-    void deletingNotExistedIdShouldRaiseException() throws Exception {
+    void deletingNotExistedIdShouldBeNotFound() throws Exception {
         doThrow(NotFoundServiceException.class).when(certificateService).delete(anyLong());
 
         mvc.perform(delete("/certificates/{id}",99))
@@ -150,10 +158,9 @@ class CertificateControllerTests {
     void addingWithCorrectDataShouldBeOk() throws Exception {
         GiftCertificate expected = certificateSample2;
         when(certificateService.add(any(CertificateDTO.class))).thenReturn(expected);
-        CertificateDTO certificateDTO = certificateDTOSample;
 
         mvc.perform(post("/certificates").contentType(MediaType.APPLICATION_JSON)
-                .content(jackson.write(certificateDTO).getJson()))
+                .content(jackson.write(certificateDTOSample).getJson()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(expected.getId()))
                 .andExpect(jsonPath("$.name").value(expected.getName()))
@@ -194,6 +201,13 @@ class CertificateControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(expected.getId()))
                 .andExpect(jsonPath("$.name").value(expected.getName()));
+    }
+
+    @Test
+    void updatingWithIncorrectParamsShouldBeBadRequest() throws Exception {
+        mvc.perform(patch("/certificates/{id}", 1).contentType("application/json-patch+json")
+                .content("[{\"op\":\"repace\", \"path\":\"/name\", \"value\":\"Patched name\"}]"))  //Here is 'repace' instead of 'replace'
+                .andExpect(status().isBadRequest());
     }
 
 

@@ -4,6 +4,7 @@ import com.epam.esm.controller.TagController;
 import com.epam.esm.dto.PagedDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.AlreadyExistServiceException;
 import com.epam.esm.exception.IncorrectDataServiceException;
 import com.epam.esm.exception.NotFoundServiceException;
 import com.epam.esm.security.SecurityConfig;
@@ -72,6 +73,16 @@ class TagControllerTests {
     }
 
     @Test
+    void gettingWithIncorrectParamShouldBadRequest() throws Exception {
+        when(tagService.getById(anyLong())).thenThrow(IncorrectDataServiceException.class);
+
+        mvc.perform(get("/tags/{id}",-1))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/tags/dfdf"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void correctGettingAllShouldBeOk() throws Exception {
         int pageSize = 5;
         int pageNumber = 1;
@@ -126,6 +137,15 @@ class TagControllerTests {
         mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
                         .content(jackson.write(tagDTOSample).getJson()))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addingWithAlreadyExistentTagShouldBeConflict() throws Exception {
+        when(tagService.add(any(TagDTO.class))).thenThrow(AlreadyExistServiceException.class);
+
+        mvc.perform(post("/tags").contentType(MediaType.APPLICATION_JSON)
+                        .content(jackson.write(tagDTOSample).getJson()))
+                .andExpect(status().isConflict());
     }
 
     @Test
