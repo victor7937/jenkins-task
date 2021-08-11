@@ -211,10 +211,10 @@ class CertificateControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
-    // @Test
-    // void failTest(){
-    //     fail();
-    // }
+    @Test
+    void failTest(){
+        fail();
+    }
 
 
 
