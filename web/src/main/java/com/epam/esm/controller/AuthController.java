@@ -34,10 +34,10 @@ public class AuthController {
         return new AuthResponse(authDTO.getEmail(), authAndTokenProvider.authenticate(authDTO));
     }
 
-//    @GetMapping("/hello")
-//    public String sayHello(){
-//        return "Hello";
-//    }
+   @GetMapping("/hello")
+   public String sayHello(){
+       return "Hello";
+   }
 
     /**
      * Endpoint for new users registration
