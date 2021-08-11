@@ -36,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -208,6 +209,11 @@ class CertificateControllerTests {
         mvc.perform(patch("/certificates/{id}", 1).contentType("application/json-patch+json")
                 .content("[{\"op\":\"repace\", \"path\":\"/name\", \"value\":\"Patched name\"}]"))  //Here is 'repace' instead of 'replace'
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void failTest(){
+        fail();
     }
 
 
